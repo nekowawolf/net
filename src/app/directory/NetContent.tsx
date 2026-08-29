@@ -3,7 +3,7 @@
 import { FallbackImage } from '@/components/FallbackImage';
 import Link from 'next/link';
 import Pagination from '@/components/Pagination';
-import { useWebResources } from '@/hooks/useWebResources';
+import { useNet } from '@/hooks/useNet';
 import { Spinner } from '@/components/ui/spinner';
 import { CgClose } from "react-icons/cg";
 import NwwOneeAIChat from '@/components/NwwOneeAIChat';
@@ -25,19 +25,19 @@ const categories = [
 
 import { Suspense, useRef, useState, useEffect } from 'react';
 
-export default function WebResourcesContent() {
+export default function NetContent() {
     return (
         <Suspense fallback={
             <div className="flex justify-center items-center min-h-[50vh]">
                 <Spinner className="text-blue-500 size-10" />
             </div>
         }>
-            <WebResourcesContentInner />
+            <NetContentInner />
         </Suspense>
     );
 }
 
-function WebResourcesContentInner() {
+function NetContentInner() {
     const {
         displayedResources,
         loading,
@@ -51,7 +51,7 @@ function WebResourcesContentInner() {
         handlePageChange,
         totalPages,
         totalItems
-    } = useWebResources(ITEMS_PER_PAGE);
+    } = useNet(ITEMS_PER_PAGE);
 
     const scrollRef = useRef<HTMLDivElement>(null);
     const fadeRef = useRef<HTMLDivElement>(null);

@@ -1,16 +1,16 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { WebResource } from '@/types/webresource';
-import { fetchWebResources } from '@/services/webResourceService';
+import { Net } from '@/types/net';
+import { fetchNetData } from '@/services/netService';
 
 let isInitialLoad = true;
 
-export const useWebResources = (itemsPerPage: number = 8) => {
+export const useNet = (itemsPerPage: number = 8) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
 
-    const [resourcesData, setResourcesData] = useState<WebResource[]>([]);
+    const [resourcesData, setResourcesData] = useState<Net[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     
@@ -33,10 +33,10 @@ export const useWebResources = (itemsPerPage: number = 8) => {
                     }
                 }
                 
-                const data = await fetchWebResources(forceShuffle);
+                const data = await fetchNetData(forceShuffle);
                 setResourcesData(data);
             } catch (err) {
-                setError('Failed to fetch web resources data');
+                setError('Failed to fetch net data');
             } finally {
                 setLoading(false);
             }

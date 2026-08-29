@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { fetchWebResources } from "@/services/webResourceService";
-import { WebResource } from "@/types/webresource";
+import { fetchNetData } from "@/services/netService";
+import { Net } from "@/types/net";
 import { Spinner } from "@/components/ui/spinner";
 import { FallbackImage } from "@/components/FallbackImage";
 import { FaExternalLinkAlt, FaPlayCircle } from "react-icons/fa";
@@ -17,8 +17,8 @@ import { HiOutlinePhotograph } from "react-icons/hi";
 
 export default function DetailClient() {
   const { id } = useParams();
-  const [resource, setResource] = useState<WebResource | null>(null);
-  const [suggestedResources, setSuggestedResources] = useState<WebResource[]>([]);
+  const [resource, setResource] = useState<Net | null>(null);
+  const [suggestedResources, setSuggestedResources] = useState<Net[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function DetailClient() {
     const fetchDetail = async () => {
       setLoading(true);
       try {
-        const allResources = await fetchWebResources();
+        const allResources = await fetchNetData();
         const foundResource = allResources.find((t) => t._id.toString() === id);
         
         if (foundResource) {
@@ -147,23 +147,23 @@ export default function DetailClient() {
                   </a>
                 )}
 
-                {resource.twitter && (
-                  <a href={resource.twitter} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-opacity text-fill-color">
+                {resource.socials?.twitter && (
+                  <a href={resource.socials.twitter} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-opacity text-fill-color">
                     <FaXTwitter className="w-[21px] h-[21px] md:w-5 md:h-5" />
                   </a>
                 )}
-                {resource.instagram && (
-                  <a href={resource.instagram} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-opacity text-fill-color">
+                {resource.socials?.instagram && (
+                  <a href={resource.socials.instagram} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-opacity text-fill-color">
                     <FaInstagram className="w-[21px] h-[21px] md:w-5 md:h-5" />
                   </a>
                 )}
-                {resource.youtube && (
-                  <a href={resource.youtube} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-opacity text-fill-color">
+                {resource.socials?.youtube && (
+                  <a href={resource.socials.youtube} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-opacity text-fill-color">
                     <FaYoutube className="w-[21px] h-[21px] md:w-5 md:h-5" />
                   </a>
                 )}
-                {resource.discord && (
-                  <a href={resource.discord} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-opacity text-fill-color">
+                {resource.socials?.discord && (
+                  <a href={resource.socials.discord} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-opacity text-fill-color">
                     <BsDiscord className="w-[21px] h-[21px] md:w-5 md:h-5" />
                   </a>
                 )}
@@ -173,7 +173,7 @@ export default function DetailClient() {
         </div>
 
         {/* Media Section */}
-        {(resource.video_url || (resource.screenshot_urls && resource.screenshot_urls.length > 0)) && (
+        {(resource.media?.video_url || (resource.media?.screenshot_urls && resource.media.screenshot_urls.length > 0)) && (
           <div className="glass-card rounded-3xl p-7 mb-8 border border-white/10 relative overflow-hidden">
             <div className="flex items-center gap-2 mb-6">
               <div className="p-2 rounded-lg bg-blue-500/20 text-blue-500">
@@ -182,58 +182,67 @@ export default function DetailClient() {
               <h2 className="text-xl font-bold">Preview</h2>
             </div>
             
-            <div className="w-full flex gap-4 overflow-x-auto pb-4 snap-x max-md:[&::-webkit-scrollbar]:hidden max-md:[-ms-overflow-style:none] max-md:[scrollbar-width:none] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-blue-500/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-blue-500/60">
-              {/* Video Content */}
-              {resource.video_url && (
-                <>
-                  {(() => {
-                    const url = resource.video_url!;
-                    if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-                      const match = url.match(regExp);
-                      const videoId = (match && match[2].length === 11) ? match[2] : null;
-                      
-                      if (videoId) {
+            {(() => {
+              const videoCount = resource.media?.video_url ? 1 : 0;
+              const screenshotCount = resource.media?.screenshot_urls ? resource.media.screenshot_urls.length : 0;
+              const totalMedia = videoCount + screenshotCount;
+              
+              return (
+                <div className={`w-full flex gap-4 overflow-x-auto pb-4 snap-x [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-blue-500/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-blue-500/60 ${totalMedia === 1 ? 'justify-center' : ''}`}>
+                  {/* Video Content */}
+                  {resource.media?.video_url && (
+                    <>
+                      {(() => {
+                        const url = resource.media!.video_url!;
+                        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                          const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                          const match = url.match(regExp);
+                          const videoId = (match && match[2].length === 11) ? match[2] : null;
+                          
+                          if (videoId) {
+                            return (
+                              <div className="flex-shrink-0 w-[75vw] sm:w-[85vw] md:w-[600px] aspect-video rounded-xl overflow-hidden border border-white/5 snap-center bg-black/40 relative">
+                                <iframe 
+                                  width="100%" 
+                                  height="100%" 
+                                  src={`https://www.youtube.com/embed/${videoId}`} 
+                                  title="YouTube video player" 
+                                  frameBorder="0" 
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                  allowFullScreen
+                                ></iframe>
+                              </div>
+                            );
+                          }
+                        }
+                        
                         return (
-                          <div className="flex-shrink-0 w-[85vw] md:w-[600px] aspect-video rounded-xl overflow-hidden border border-white/5 snap-center bg-black/40 relative">
-                            <iframe 
-                              width="100%" 
-                              height="100%" 
-                              src={`https://www.youtube.com/embed/${videoId}`} 
-                              title="YouTube video player" 
-                              frameBorder="0" 
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                              allowFullScreen
-                            ></iframe>
+                          <div className="flex-shrink-0 w-[75vw] sm:w-[85vw] md:w-[600px] aspect-video rounded-xl overflow-hidden border border-white/5 snap-center bg-black/40 relative flex items-center justify-center">
+                            <a href={url} target="_blank" rel="noopener noreferrer" className="cursor-pointer inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20">
+                              <FaPlayCircle className="w-4 h-4" />
+                              Watch Video
+                            </a>
                           </div>
                         );
-                      }
-                    }
-                    
-                    return (
-                      <div className="flex-shrink-0 w-[85vw] md:w-[600px] aspect-video rounded-xl overflow-hidden border border-white/5 snap-center bg-black/40 relative flex items-center justify-center">
-                        <a href={url} target="_blank" rel="noopener noreferrer" className="cursor-pointer inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-white bg-blue-600 hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20">
-                          <FaPlayCircle className="w-4 h-4" />
-                          Watch Video
-                        </a>
-                      </div>
-                    );
-                  })()}
-                </>
-              )}
+                      })()}
+                    </>
+                  )}
 
-              {/* Screenshots Content */}
-              {resource.screenshot_urls && resource.screenshot_urls.map((url, index) => (
-                <div key={index} className="flex-shrink-0 w-[85vw] md:w-[600px] aspect-video rounded-xl overflow-hidden border border-white/5 snap-center bg-black/40 relative">
-                  <FallbackImage
-                    src={url}
-                    alt={`${resource.name} Screenshot ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    unoptimized
-                  />
+                  {/* Screenshots Content */}
+                  {resource.media?.screenshot_urls && resource.media.screenshot_urls.map((url, index) => (
+                    <div key={index} className="flex-shrink-0 w-[75vw] sm:w-[85vw] md:w-[600px] aspect-video rounded-xl overflow-hidden border border-white/5 snap-center bg-black/40 relative">
+                      <FallbackImage
+                        src={url}
+                        alt={`${resource.name} Screenshot ${index + 1}`}
+                        fill
+                        className="w-full h-full object-cover"
+                        unoptimized
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              );
+            })()}
           </div>
         )}
 
