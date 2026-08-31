@@ -87,7 +87,7 @@ export default function Header() {
                 href="/directory"
                 className="text-fill-color/70 font-semibold hover:!text-blue-600 transition-colors duration-300"
               >
-                Directory
+                Net
               </Link>
               <Link
                 href="/blog"
@@ -156,7 +156,7 @@ export default function Header() {
               onClick={() => setIsMenuOpen(false)}
               className="block font-semibold text-fill-color/70 hover:!text-blue-600 transition-colors duration-300"
             >
-              Directory
+              Net
             </Link>
             <Link
               href="/blog"
