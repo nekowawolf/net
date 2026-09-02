@@ -7,6 +7,7 @@ import { fetchNetData } from "@/services/netService";
 import { Net } from "@/types/net";
 import { Spinner } from "@/components/ui/spinner";
 import { FallbackImage } from "@/components/FallbackImage";
+import ZoomableImage from "@/components/ZoomableImage";
 import { FaExternalLinkAlt, FaPlayCircle } from "react-icons/fa";
 import { FaXTwitter, FaYoutube, FaInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
@@ -231,11 +232,12 @@ export default function DetailClient() {
                   {/* Screenshots Content */}
                   {resource.media?.screenshot_urls && resource.media.screenshot_urls.map((url, index) => (
                     <div key={index} className="flex-shrink-0 w-[75vw] sm:w-[85vw] md:w-[600px] aspect-video rounded-xl overflow-hidden border border-white/5 snap-center bg-black/40 relative">
-                      <FallbackImage
+                      <ZoomableImage
                         src={url}
                         alt={`${resource.name} Screenshot ${index + 1}`}
+                        className="absolute inset-0 w-full h-full"
+                        imageClassName="w-full h-full object-cover"
                         fill
-                        className="w-full h-full object-cover"
                         unoptimized
                       />
                     </div>
