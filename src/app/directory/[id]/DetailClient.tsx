@@ -8,7 +8,7 @@ import { Net } from "@/types/net";
 import { Spinner } from "@/components/ui/spinner";
 import { FallbackImage } from "@/components/FallbackImage";
 import ZoomableImage from "@/components/ZoomableImage";
-import { FaExternalLinkAlt, FaPlayCircle } from "react-icons/fa";
+import { FaExternalLinkAlt, FaPlayCircle, FaGithub } from "react-icons/fa";
 import { FaXTwitter, FaYoutube, FaInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
 import BackButton from "@/components/BackButton";
@@ -166,6 +166,11 @@ export default function DetailClient() {
                 {resource.socials?.discord && (
                   <a href={resource.socials.discord} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-opacity text-fill-color">
                     <BsDiscord className="w-[21px] h-[21px] md:w-5 md:h-5" />
+                  </a>
+                )}
+                {resource.socials?.github && (
+                  <a href={resource.socials.github} target="_blank" rel="noopener noreferrer" className="cursor-pointer opacity-70 hover:opacity-100 transition-opacity text-fill-color">
+                    <FaGithub className="w-[21px] h-[21px] md:w-5 md:h-5" />
                   </a>
                 )}
               </div>

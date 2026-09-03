@@ -13,6 +13,7 @@ export interface Net {
         twitter?: string;
         instagram?: string;
         discord?: string;
+        github?: string;
         youtube?: string;
     };
     created_at?: string;
