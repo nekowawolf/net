@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Net } from '@/types/net';
 import { fetchNetData } from '@/services/netService';
+import Fuse from 'fuse.js';
 
 let isInitialLoad = true;
 
@@ -17,6 +18,40 @@ export const useNet = (itemsPerPage: number = 8) => {
     const [localSearchQuery, setLocalSearchQuery] = useState(searchParams.get('q') || '');
     const [localCategory, setLocalCategory] = useState(searchParams.get('category') || 'All');
     const [localPage, setLocalPage] = useState(Number(searchParams.get('page')) || 1);
+    const [suggestion, setSuggestion] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!localSearchQuery || resourcesData.length === 0) {
+            setSuggestion(null);
+            return;
+        }
+
+        const exactMatchExists = resourcesData.some(r => 
+            r.name.toLowerCase().includes(localSearchQuery.toLowerCase())
+        );
+
+        if (exactMatchExists) {
+            setSuggestion(null);
+            return;
+        }
+
+        const fuse = new Fuse(resourcesData, {
+            keys: ['name'],
+            threshold: 0.4,
+        });
+
+        const results = fuse.search(localSearchQuery);
+        if (results.length > 0) {
+            const bestMatch = results[0].item.name;
+            if (bestMatch.toLowerCase() !== localSearchQuery.toLowerCase()) {
+                setSuggestion(bestMatch);
+            } else {
+                setSuggestion(null);
+            }
+        } else {
+            setSuggestion(null);
+        }
+    }, [localSearchQuery, resourcesData]);
 
     useEffect(() => {
         const loadData = async () => {
@@ -121,6 +156,11 @@ export const useNet = (itemsPerPage: number = 8) => {
         setLocalPage(1);
     };
 
+    const handleSuggestionClick = (newQuery: string) => {
+        setLocalSearchQuery(newQuery);
+        setLocalPage(1);
+    };
+
     return {
         displayedResources,
         loading,
@@ -133,6 +173,8 @@ export const useNet = (itemsPerPage: number = 8) => {
         currentPage: validCurrentPage,
         handlePageChange,
         totalPages,
-        totalItems
+        totalItems,
+        suggestion,
+        handleSuggestionClick
     };
 }
