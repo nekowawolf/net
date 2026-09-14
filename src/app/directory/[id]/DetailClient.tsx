@@ -242,6 +242,8 @@ export default function DetailClient() {
                         alt={`${resource.name} Screenshot ${index + 1}`}
                         className="absolute inset-0 w-full h-full"
                         imageClassName="w-full h-full object-cover"
+                        images={resource.media.screenshot_urls}
+                        currentIndex={index}
                         fill
                         unoptimized
                       />
