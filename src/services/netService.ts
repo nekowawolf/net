@@ -1,4 +1,4 @@
-import { Net } from '@/types/net';
+import { Net, NetSubmissionPayload } from '@/types/net';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -65,4 +65,22 @@ export const fetchNetById = async (id: string): Promise<Net | null> => {
         console.error('Error fetching Net item by ID:', error);
         return null;
     }
+};
+
+export const submitNet = async (payload: NetSubmissionPayload) => {
+    const fullUrl = `${API_BASE_URL}/net-submissions`;
+    const response = await fetch(fullUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || errorData.message || 'Failed to submit net');
+    }
+
+    return response.json();
 };
