@@ -71,7 +71,7 @@ export default function AddNetClient() {
     }, [website, existingUrls]);
 
     const websiteError = website.trim() && !isValidHttpUrl(website.trim())
-        ? 'Website must be a valid URL starting with http:// or https://'
+        ? 'Website URL must be a valid URL starting with https://'
         : null;
 
     const handleWebsiteChange = (value: string) => {
@@ -89,11 +89,11 @@ export default function AddNetClient() {
         const trimmedLink = link.trim();
 
         if (!trimmedWebsite) {
-            toast.error('Website is required.');
+            toast.error('Website URL is required.');
             return;
         }
         if (!isValidHttpUrl(trimmedWebsite)) {
-            toast.error('Invalid website URL format.');
+            toast.error('Invalid Website URL format.');
             return;
         }
         if (urlExists || existingUrls.includes(normalizeUrl(trimmedWebsite))) {
@@ -145,7 +145,7 @@ export default function AddNetClient() {
                         /add-net
                     </h1>
                     <p className="text-fill-color/60 text-sm max-w-full sm:max-w-xl leading-relaxed">
-                        Know a useful website or web resource that belongs here? Submit it below and help us build a comprehensive directory of web resources.
+                        Know a useful website or web resource that belongs here? Submit its URL and help grow the ecosystem directory. Every submission is reviewed before publishing.
                     </p>
                 </div>
 
@@ -153,7 +153,7 @@ export default function AddNetClient() {
                     <div className="flex flex-col space-y-2">
                         <div className="flex items-center gap-2">
                             <label htmlFor="website" className="text-sm font-semibold text-fill-color">
-                                Website <span className="text-red-500">*</span>
+                                Website URL <span className="text-red-500">*</span>
                             </label>
                             {isCheckingUrl && <Spinner className="w-3.5 h-3.5 text-blue-500" />}
                             {!isCheckingUrl && urlExists !== null && (
@@ -214,7 +214,7 @@ export default function AddNetClient() {
 
                     <div className="flex flex-col space-y-2">
                         <label htmlFor="contributor-link" className="text-sm font-semibold text-fill-color">
-                            Link <span className="text-fill-color/40 font-normal">(optional)</span>
+                            Contributor link <span className="text-fill-color/40 font-normal">(optional)</span>
                         </label>
                         <input
                             id="contributor-link"
