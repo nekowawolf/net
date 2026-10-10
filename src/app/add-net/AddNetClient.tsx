@@ -71,7 +71,7 @@ export default function AddNetClient() {
     }, [website, existingUrls]);
 
     const websiteError = website.trim() && !isValidHttpUrl(website.trim())
-        ? 'Website must be a valid URL starting with http:// or https://'
+        ? 'Website URL must be a valid URL starting with https://'
         : null;
 
     const handleWebsiteChange = (value: string) => {
@@ -89,11 +89,11 @@ export default function AddNetClient() {
         const trimmedLink = link.trim();
 
         if (!trimmedWebsite) {
-            toast.error('Website is required.');
+            toast.error('Website URL is required.');
             return;
         }
         if (!isValidHttpUrl(trimmedWebsite)) {
-            toast.error('Invalid website URL format.');
+            toast.error('Invalid Website URL format.');
             return;
         }
         if (urlExists || existingUrls.includes(normalizeUrl(trimmedWebsite))) {
@@ -153,7 +153,7 @@ export default function AddNetClient() {
                     <div className="flex flex-col space-y-2">
                         <div className="flex items-center gap-2">
                             <label htmlFor="website" className="text-sm font-semibold text-fill-color">
-                                Website <span className="text-red-500">*</span>
+                                Website URL <span className="text-red-500">*</span>
                             </label>
                             {isCheckingUrl && <Spinner className="w-3.5 h-3.5 text-blue-500" />}
                             {!isCheckingUrl && urlExists !== null && (
