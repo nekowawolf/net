@@ -270,11 +270,11 @@ export default function DetailClient() {
                     {sResource.categories && sResource.categories.length > 0 && (
                       <div className="flex items-center gap-1.5 ml-2">
                         <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 whitespace-nowrap">
-                          {sResource.categories[0]}
+                          <span className="relative top-px">{sResource.categories[0]}</span>
                         </span>
                         {sResource.categories.length > 1 && (
                           <span className="text-[10px] px-2 py-0.5 rounded-md border border-color bg-card-color text-fill-color/70 font-bold whitespace-nowrap">
-                            +{sResource.categories.length - 1}
+                            <span className="relative top-px">+{sResource.categories.length - 1}</span>
                           </span>
                         )}
                       </div>
