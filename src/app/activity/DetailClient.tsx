@@ -1,9 +1,9 @@
 'use client';
 
-import NwwOneeAIChat from "@/components/NwwOneeAIChat";
-import LastNet from "@/components/LastNet";
-import Support from "@/components/Support";
-import LastCommits from "@/components/LastCommits";
+import NwwOneeAIChat from "@/components/chat/NwwOneeAIChat";
+import LastNet from "@/components/activity/LastNet";
+import Support from "@/components/support/Support";
+import LastCommits from "@/components/activity/LastCommits";
 
 export default function DetailClient() {
   return (

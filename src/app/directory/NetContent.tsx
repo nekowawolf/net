@@ -1,13 +1,13 @@
 'use client';
 
-import { FallbackImage } from '@/components/FallbackImage';
+import { FallbackImage } from '@/components/common/FallbackImage';
 import Link from 'next/link';
-import Pagination from '@/components/Pagination';
+import Pagination from '@/components/common/Pagination';
 import { useNet } from '@/hooks/useNet';
 import { Spinner } from '@/components/ui/spinner';
 import { CgClose } from "react-icons/cg";
 import { GoSearch } from "react-icons/go";
-import NwwOneeAIChat from '@/components/NwwOneeAIChat';
+import NwwOneeAIChat from '@/components/chat/NwwOneeAIChat';
 
 const ITEMS_PER_PAGE = 8;
 

@@ -6,13 +6,13 @@ import Link from "next/link";
 import { fetchNetData } from "@/services/netService";
 import { Net } from "@/types/net";
 import { Spinner } from "@/components/ui/spinner";
-import { FallbackImage } from "@/components/FallbackImage";
-import ZoomableImage from "@/components/ZoomableImage";
+import { FallbackImage } from "@/components/common/FallbackImage";
+import ZoomableImage from "@/components/common/ZoomableImage";
 import { FaExternalLinkAlt, FaPlayCircle, FaGithub } from "react-icons/fa";
 import { FaXTwitter, FaYoutube, FaInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
-import BackButton from "@/components/BackButton";
-import NwwOneeAIChat, { chatStore } from "@/components/NwwOneeAIChat";
+import BackButton from "@/components/common/BackButton";
+import NwwOneeAIChat, { chatStore } from "@/components/chat/NwwOneeAIChat";
 import { CiBookmark } from "react-icons/ci";
 import { HiOutlinePhotograph } from "react-icons/hi";
 
